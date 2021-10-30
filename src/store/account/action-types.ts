@@ -1,0 +1,6 @@
+enum ACCOUNT_ACTION_TYPES {
+  LOGIN = 'LOGIN',
+  LOGOUT = 'LOGOUT',
+}
+
+export default ACCOUNT_ACTION_TYPES;
