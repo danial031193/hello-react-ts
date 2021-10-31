@@ -1,7 +1,12 @@
-import React, { useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
+import { IModalProps, IModalState } from '@components/modal';
 import styles from './styles.module.scss';
 
-const Dialog = ({
+interface IDialog extends IModalProps {
+  animationType: IModalState['animationType'];
+}
+
+const Dialog: FC<IDialog> = ({
   width,
   height,
   measure,
@@ -25,8 +30,8 @@ const Dialog = ({
    */
   const style = useMemo(() => {
     return {
-      width: width + measure,
-      height: height + measure,
+      width: `${width}${measure}`,
+      height: `${height}${measure}`,
       animationDuration: duration + 'ms',
     };
   }, [duration, height, measure, width]);

@@ -1,11 +1,21 @@
 import React, { FC, useEffect } from 'react';
 import { IPostsStateToProps, IPostsDispatchToProps } from '@pages/posts/index.props';
 import Post from '@components/post';
+import { TestService } from '../../services/TestService';
+import { PostsService } from '../../services/PostsService';
 
 type IPosts = IPostsStateToProps & IPostsDispatchToProps;
 
 const Posts: FC<IPosts> = ({ posts, error, loading, getPosts }) => {
   useEffect(() => getPosts(), [getPosts]);
+
+  useEffect(() => {
+    const test = TestService.getInstance().get();
+    console.log({ test });
+  }, []);
+
+  const postsService = new PostsService(posts);
+  const postsIds = postsService.getPostsIds();
 
   return (
     <div>
@@ -16,9 +26,12 @@ const Posts: FC<IPosts> = ({ posts, error, loading, getPosts }) => {
       ) : error ? (
         <p>{error}</p>
       ) : (
-        posts.map(({ userId, id, title, body }) => (
-          <Post key={id} body={body} title={title} userId={userId} />
-        ))
+        <>
+          <p>Post IDs: {postsIds?.join(', ')}</p>
+          {posts.map(({ userId, id, title, body }) => (
+            <Post key={id} body={body} title={title} userId={userId} />
+          ))}
+        </>
       )}
     </div>
   );

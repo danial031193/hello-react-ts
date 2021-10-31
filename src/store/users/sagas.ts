@@ -3,6 +3,7 @@ import { put, select, takeLatest } from 'redux-saga/effects';
 import TYPES from '@store/users/action-types';
 import { SagaIterator } from 'redux-saga';
 import { IAction } from '@interfaces/redux/IAction';
+import { IUser } from '@interfaces/user/i-user';
 
 /**
  * Create new user and add him to list
@@ -30,9 +31,9 @@ function* deleteUser({ payload: { id } }: IAction<TYPES>): SagaIterator {
     return;
   }
 
-  const list = yield select((state) => state.users.list);
+  const list: IUser[] = yield select((state) => state.users.list);
 
-  const newList = list.filter((user: any) => user.id !== id);
+  const newList = list.filter((user) => user.id !== id);
 
   yield put(updateUsersList(newList));
 }

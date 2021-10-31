@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
-interface IPost {
-  userId: string;
+export interface IPost {
+  userId: number;
   title: string;
   body: string;
 }

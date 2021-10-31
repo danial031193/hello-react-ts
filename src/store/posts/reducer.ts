@@ -1,14 +1,11 @@
 import TYPES from './action-types';
 import { IAction } from '@interfaces/redux/IAction';
 import IReducerState from '@interfaces/redux/IReducerState';
+import { IPost } from '@interfaces/post/i-post';
 
 export interface IPostsState {
-  list: IReducerState<any[]>;
-  userList: {
-    result: any[];
-    error: string | null;
-    fetching: boolean;
-  };
+  list: IReducerState<IPost[]>;
+  userList: IReducerState<IPost[]>;
 }
 
 const initialState: IPostsState = {

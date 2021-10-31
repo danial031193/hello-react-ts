@@ -1,9 +1,43 @@
-import React, { PureComponent } from 'react';
-import * as PropTypes from 'prop-types';
+import React, { CSSProperties, PureComponent } from 'react';
 import Dialog from './dialog';
 import styles from './styles.module.scss';
 
-class Modal extends PureComponent {
+export type IModalAnimationType =
+  | 'zoom'
+  | 'fade'
+  | 'flip'
+  | 'door'
+  | 'rotate'
+  | 'slideUp'
+  | 'slideDown'
+  | 'slideLeft'
+  | 'slideRight';
+
+export interface IModalProps {
+  animation: IModalAnimationType;
+  enterAnimation?: IModalAnimationType;
+  leaveAnimation?: IModalAnimationType;
+  visible: boolean;
+  closeOnEsc?: boolean;
+  toggle: () => void;
+  onAnimationEnd?: () => void;
+  duration?: number;
+  closeMaskOnClick?: boolean;
+  customMaskStyles?: CSSProperties;
+  customStyles?: CSSProperties;
+  showMask?: boolean;
+  className?: string;
+  width?: number;
+  height?: number;
+  measure?: 'px' | '%' | 'vh' | 'vw';
+}
+
+export interface IModalState {
+  isShow: boolean;
+  animationType: 'enter' | 'leave';
+}
+
+class Modal extends PureComponent<IModalProps, IModalState> {
   static defaultProps = {
     width: 400,
     height: 240,
@@ -21,9 +55,9 @@ class Modal extends PureComponent {
     customMaskStyles: {},
   };
 
-  el;
+  el: HTMLDivElement | null = null;
 
-  state = {
+  state: IModalState = {
     isShow: false,
     animationType: 'leave',
   };
@@ -34,7 +68,7 @@ class Modal extends PureComponent {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Readonly<IModalProps>) {
     const { visible } = this.props;
 
     if (visible && !prevProps.visible) {
@@ -65,7 +99,7 @@ class Modal extends PureComponent {
   /**
    * Close modal on press 'esc' button
    */
-  onKeyUp = (event) => {
+  onKeyUp = (event: React.KeyboardEvent<HTMLDivElement>) => {
     const { closeOnEsc, toggle } = this.props;
 
     if (!closeOnEsc || event.keyCode !== 27) {
@@ -78,7 +112,7 @@ class Modal extends PureComponent {
   /**
    * Animation end event
    */
-  animationEnd = (event) => {
+  animationEnd = (event: React.AnimationEvent<HTMLDivElement>) => {
     const { animationType } = this.state;
     const { closeOnEsc, onAnimationEnd } = this.props;
 
@@ -136,53 +170,5 @@ class Modal extends PureComponent {
     );
   }
 }
-
-Modal.propTypes = {
-  animation: PropTypes.oneOf([
-    'zoom',
-    'fade',
-    'flip',
-    'door',
-    'rotate',
-    'slideUp',
-    'slideDown',
-    'slideLeft',
-    'slideRight',
-  ]),
-  enterAnimation: PropTypes.oneOf([
-    'zoom',
-    'fade',
-    'flip',
-    'door',
-    'rotate',
-    'slideUp',
-    'slideDown',
-    'slideLeft',
-    'slideRight',
-  ]),
-  leaveAnimation: PropTypes.oneOf([
-    'zoom',
-    'fade',
-    'flip',
-    'door',
-    'rotate',
-    'slideUp',
-    'slideDown',
-    'slideLeft',
-    'slideRight',
-  ]),
-  width: PropTypes.number,
-  height: PropTypes.number,
-  measure: PropTypes.oneOf(['px', '%', 'vh', 'vw']),
-  customStyles: PropTypes.object,
-  visible: PropTypes.bool,
-  closeOnEsc: PropTypes.bool,
-  closeMaskOnClick: PropTypes.bool,
-  toggle: PropTypes.func,
-  onAnimationEnd: PropTypes.func,
-  customMaskStyles: PropTypes.object,
-  duration: PropTypes.number,
-  className: PropTypes.string,
-};
 
 export default Modal;
